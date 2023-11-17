@@ -1,5 +1,9 @@
 # Tebex Tech Test
 
+## Submission
+
+Please download/clone this repository and submit your final code by emailing a .zip or by sharing a link to your own repository on GitHub/GitLab. Please avoid forking this repository through GitHub.
+
 ## Task
 
 ### Part 1
