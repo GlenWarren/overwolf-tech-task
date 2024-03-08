@@ -12,13 +12,14 @@ use Illuminate\Http\Request;
  */
 class LookupController extends Controller
 {
-    public function lookup(Request $request) {
+    public function lookup(Request $request)
+    {
         if ($request->get('type') == 'minecraft') {
             if ($request->get('username')) {
                 $username = $request->get('username');
                 $userId = false;
             }
-            if ($request->get('id')){
+            if ($request->get('id')) {
                 $username=false;
                 $userId = $request->get('id');
             }
@@ -38,8 +39,7 @@ class LookupController extends Controller
                 ];
             }
 
-            if ($userId)
-            {
+            if ($userId) {
                 $guzzle = new Client();
                 $response = $guzzle->get(
                     "https://sessionserver.mojang.com/session/minecraft/profile/{$userId}"
@@ -69,7 +69,7 @@ class LookupController extends Controller
                 ];
             }
 
-        }elseif($request->get('type') === 'xbl'){
+        } elseif($request->get('type') === 'xbl') {
             if ($request->get("username")) {
                 $guzzle = new Client();
                 $response = $guzzle->get("https://ident.tebex.io/usernameservices/3/username/" . $request->get("username") . "?type=username");
@@ -95,7 +95,7 @@ class LookupController extends Controller
                 ];
             }
         }
-        //We can't handle this - maybe provide feedback?
+        // We can't handle this - maybe provide feedback?
         die();
     }
 }
