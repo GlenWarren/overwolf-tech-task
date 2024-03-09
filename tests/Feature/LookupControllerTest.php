@@ -3,33 +3,11 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-// use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-// use App\Models\User;
 
 class LookupControllerTest extends TestCase
 {
-    // use RefreshDatabase;
-
     const LOOKUP_URL = 'lookup';
-
-    // public function setUp(): void
-    // {
-    //     parent::setUp();
-
-        // $this->user1 = new User([
-        //     'name' => 'Garfield',
-        //     'email' => 'garfield@gmail.com',
-        //     'image_url' => 'garfield_image_1.com'
-        // ]);
-        // $this->user1->save();
-        // $this->user2 = new User([
-        //     'name' => 'Felix',
-        //     'email' => 'felix@gmail.com',
-        //     'image_url' => 'felix_image_1.com'
-        // ]);
-        // $this->user2->save();
-    // }
 
     public function test_lookup(): void
     {

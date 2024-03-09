@@ -37,12 +37,29 @@ class LookupController extends Controller
 
         if (is_null($type) || is_null($id) && is_null($username)) {
             // do something?
-            // Should these checks happen in the service instead? Or perhaps in the provider?
+            // Should these checks happen in the services instead? Or perhaps in the provider?
             return;
         }
 
-        $lookup_service = app()->makeWith('LookupService', [$type, $id, $username]);
+        switch ($type) {
+            case 'minecraft':
+                $service_name = 'LookupMinecraftService';
+                break;
+            case 'steam':
+                $service_name = 'LookupSteamService';
+                break;
+            case 'xbl':
+                $service_name = 'LookupXBLService';
+                break;
+            default:
+                // do something to handle scenario where type is not valid
+                // probably remove the is_null chack above    
+               return;
+        }
 
+        $lookup_service = app()->makeWith($service_name, [$id, $username]);
+
+        // Should we be immediately returning the response from the service? Or constructing the controller response here?
         return $lookup_service->lookup();
 
         // We can't handle this - maybe provide feedback?
