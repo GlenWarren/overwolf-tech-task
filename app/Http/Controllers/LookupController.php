@@ -14,14 +14,18 @@ class LookupController extends Controller
 {
     public function lookup(Request $request)
     {
-        if ($request->get('type') == 'minecraft') {
-            if ($request->get('username')) {
-                $username = $request->get('username');
+        $type = $request->get('type', null);
+        $id = $request->get('id', null);
+        $username = $request->get('username', null);
+
+        if ($type === 'minecraft') {
+            if ($username) {
+                $username = $username;
                 $userId = false;
             }
-            if ($request->get('id')) {
-                $username=false;
-                $userId = $request->get('id');
+            if ($id) {
+                $username = false;
+                $userId = $id;
             }
 
             if ($username) {
@@ -52,11 +56,11 @@ class LookupController extends Controller
                     'avatar' => "https://crafatar.com/avatars" . $match->id
                 ];
             }
-        } elseif ($request->get('type')=='steam') {
-            if ($request->get("username")) {
+        } elseif ($type === 'steam') {
+            if ($username) {
                 die("Steam only supports IDs");
             } else {
-                $id = $request->get("id");
+                $id = $id;
                 $guzzle = new Client();
                 $url = "https://ident.tebex.io/usernameservices/4/username/{$id}";
 
@@ -69,10 +73,10 @@ class LookupController extends Controller
                 ];
             }
 
-        } elseif($request->get('type') === 'xbl') {
-            if ($request->get("username")) {
+        } elseif ($type === 'xbl') {
+            if ($username) {
                 $guzzle = new Client();
-                $response = $guzzle->get("https://ident.tebex.io/usernameservices/3/username/" . $request->get("username") . "?type=username");
+                $response = $guzzle->get("https://ident.tebex.io/usernameservices/3/username/" . $username . "?type=username");
                 $profile = json_decode($response->getBody()->getContents());
 
                 return [
@@ -82,8 +86,8 @@ class LookupController extends Controller
                 ];
             }
 
-            if ($request->get("id")) {
-                $id = $request->get("id");
+            if ($id) {
+                $id = $id;
                 $guzzle = new Client();
                 $response = $guzzle->get("https://ident.tebex.io/usernameservices/3/username/" . $id);
                 $profile = json_decode($response->getBody()->getContents());
@@ -96,6 +100,6 @@ class LookupController extends Controller
             }
         }
         // We can't handle this - maybe provide feedback?
-        die();
+        // die();
     }
 }
