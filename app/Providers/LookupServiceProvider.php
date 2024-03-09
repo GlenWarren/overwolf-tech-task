@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use GuzzleHttp\Client;
-use App\Services\LookupService;
+use App\Services\LookupMinecraftService;
+use App\Services\LookupSteamService;
+use App\Services\LookupXBLService;
 
 class LookupServiceProvider extends ServiceProvider
 {
@@ -15,9 +17,19 @@ class LookupServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('LookupService', function ($app, $parameters) {
+        $this->app->singleton('LookupMinecraftService', function ($app, $parameters) {
             $guzzle = new Client();
-            return new LookupService($guzzle, ...$parameters);
+            return new LookupMinecraftService($guzzle, ...$parameters);
+        });
+
+        $this->app->singleton('LookupSteamService', function ($app, $parameters) {
+            $guzzle = new Client();
+            return new LookupSteamService($guzzle, ...$parameters);
+        });
+
+        $this->app->singleton('LookupXBLService', function ($app, $parameters) {
+            $guzzle = new Client();
+            return new LookupXBLService($guzzle, ...$parameters);
         });
     }
 
