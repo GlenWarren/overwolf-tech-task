@@ -3,9 +3,12 @@
 namespace App\Services;
 
 use App\Contracts\LookupContract;
+use App\Traits\LookupTrait;
 
 class LookupSteamService implements LookupContract
 {
+    use LookupTrait;
+
     private $guzzle;
     private $id;
     private $username;
@@ -41,11 +44,5 @@ class LookupSteamService implements LookupContract
             // do something?
             return '';
         }
-    }
-
-    public function getResponse($url)
-    {
-        $response = $this->guzzle->get($url);
-        return json_decode($response->getBody()->getContents());
     }
 }
