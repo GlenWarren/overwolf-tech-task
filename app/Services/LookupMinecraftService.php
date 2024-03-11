@@ -24,13 +24,9 @@ class LookupMinecraftService implements LookupContract
     {
         $url = $this->getUrl();
 
-        $match = $this->getResponse($url);
+        $response = $this->getResponse($url);
 
-        return [
-            'username' => $match->name,
-            'id' => $match->id,
-            'avatar' => "https://crafatar.com/avatars{$match->id}"
-        ];
+        return $this->extractUserDetails($response);
     }
 
     public function getUrl(): string
@@ -40,8 +36,19 @@ class LookupMinecraftService implements LookupContract
         } elseif ($this->id) {
             return "https://sessionserver.mojang.com/session/minecraft/profile/{$this->id}";
         } else {
-            // do something?
             return '';
         }
+    }
+
+    public function extractUserDetails($response): array
+    {
+        $username = $response->name ?? null;
+        $id = $response->id ?? null;
+
+        return [
+            'username' => $username,
+            'id' => $id,
+            'avatar' => "https://crafatar.com/avatars{$id}"
+        ];
     }
 }

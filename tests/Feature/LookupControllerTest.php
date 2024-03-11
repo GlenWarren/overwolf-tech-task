@@ -13,7 +13,7 @@ class LookupControllerTest extends TestCase
     {
         $response = $this->getJson(self::LOOKUP_URL);
 
-        $response->assertStatus(200);
+        $response->assertStatus(400);
     }
 
     public function test_lookup_minecraft_username(): void
@@ -50,20 +50,12 @@ class LookupControllerTest extends TestCase
         }
     }
 
-    // public function test_lookup_steam_username(): void
-    // {
-    //     $response = $this->getJson(self::LOOKUP_URL . '?type=steam&username=test');
+    public function test_lookup_steam_username(): void
+    {
+        $response = $this->getJson(self::LOOKUP_URL . '?type=steam&username=test');
 
-    //     $response->assertStatus(200);
-
-    //     $expected_response = 'Steam only supports IDs';
-
-    //     // Should return an error "Steam only supports IDs"
-
-    //     // foreach(['username', 'id', 'avatar'] as $key) {
-    //     //     $this->assertEquals($expected_response[$key], $response[$key], "Unexpected $key returned");
-    //     // }
-    // }
+        $response->assertStatus(400);
+    }
 
     public function test_lookup_steam_id(): void
     {

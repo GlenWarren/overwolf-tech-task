@@ -7,4 +7,5 @@ interface LookupContract
     public function lookup();
     public function getUrl();
     public function getResponse($url);
+    public function extractUserDetails($response);
 }

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use InvalidArgumentException;
 
 /**
  * Class LookupController
@@ -35,12 +38,6 @@ class LookupController extends Controller
         $id = $request->get('id', null);
         $username = $request->get('username', null);
 
-        if (is_null($type) || is_null($id) && is_null($username)) {
-            // do something?
-            // Should these checks happen in the services instead? Or perhaps in the provider?
-            return;
-        }
-
         switch ($type) {
             case 'minecraft':
                 $service_name = 'LookupMinecraftService';
@@ -52,17 +49,25 @@ class LookupController extends Controller
                 $service_name = 'LookupXBLService';
                 break;
             default:
-                // do something to handle scenario where type is not valid
-                // probably remove the is_null chack above    
-               return;
+                throw new BadRequestHttpException("Type '{$type}' is not valid"); 
+        }
+
+        if (is_null($id) && is_null($username)) {
+            throw new BadRequestHttpException('An ID or Username is required');
         }
 
         $lookup_service = app()->makeWith($service_name, [$id, $username]);
 
-        // Should we be immediately returning the response from the service? Or constructing the controller response here?
-        return $lookup_service->lookup();
+        try {
+            $results = $lookup_service->lookup();
+        } catch (InvalidArgumentException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
 
-        // We can't handle this - maybe provide feedback?
-        // die();
+        if (in_array(null, array_values($results))) {
+            throw new HttpException(500, 'There was a problem');
+        }
+        
+        return $results;
     }
 }

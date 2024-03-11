@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\LookupContract;
 use App\Traits\LookupTrait;
+use InvalidArgumentException;
 
 class LookupSteamService implements LookupContract
 {
@@ -24,24 +25,18 @@ class LookupSteamService implements LookupContract
     {
         $url = $this->getUrl();
 
-        $match = $this->getResponse($url);
+        $response = $this->getResponse($url);
 
-        return [
-            'username' => $match->username,
-            'id' => $match->id,
-            'avatar' => $match->meta->avatar
-        ];
+        return $this->extractUserDetails($response);
     }
 
     public function getUrl(): string
     {
         if ($this->username) {
-            // TODO: change this
-            die("Steam only supports IDs");
+            throw new InvalidArgumentException('Steam only supports IDs');
         } elseif ($this->id) {
             return "https://ident.tebex.io/usernameservices/4/username/{$this->id}";
         } else {
-            // do something?
             return '';
         }
     }
