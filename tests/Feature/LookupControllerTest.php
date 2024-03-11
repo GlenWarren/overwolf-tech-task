@@ -9,11 +9,31 @@ class LookupControllerTest extends TestCase
 {
     const LOOKUP_URL = 'lookup';
 
-    public function test_lookup(): void
+    public function test_lookup_empty_params(): void
     {
         $response = $this->getJson(self::LOOKUP_URL);
 
         $response->assertStatus(400);
+
+        $this->assertEquals("Type '' is not valid", $response->getOriginalContent()['message'], 'Unexpected exception message');
+    }
+
+    public function test_lookup_invalid_type(): void
+    {
+        $response = $this->getJson(self::LOOKUP_URL . '?type=papaya&username=notch');
+
+        $response->assertStatus(400);
+
+        $this->assertEquals("Type 'papaya' is not valid", $response->getOriginalContent()['message'], 'Unexpected exception message');
+    }
+
+    public function test_lookup_missing_id_and_username(): void
+    {
+        $response = $this->getJson(self::LOOKUP_URL . '?type=minecraft');
+
+        $response->assertStatus(400);
+
+        $this->assertEquals("An ID or Username is required", $response->getOriginalContent()['message'], 'Unexpected exception message');
     }
 
     public function test_lookup_minecraft_username(): void
@@ -55,6 +75,8 @@ class LookupControllerTest extends TestCase
         $response = $this->getJson(self::LOOKUP_URL . '?type=steam&username=test');
 
         $response->assertStatus(400);
+
+        $this->assertEquals("Steam only supports IDs", $response->getOriginalContent()['message'], 'Unexpected exception message');
     }
 
     public function test_lookup_steam_id(): void
