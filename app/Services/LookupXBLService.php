@@ -24,13 +24,9 @@ class LookupXBLService implements LookupContract
     {
         $url = $this->getUrl();
 
-        $profile = $this->getResponse($url);
+        $response = $this->getResponse($url);
 
-        return [
-            'username' => $profile->username,
-            'id' => $profile->id,
-            'avatar' => $profile->meta->avatar
-        ];
+        return $this->extractUserDetails($response);
     }
 
     public function getUrl(): string
@@ -40,7 +36,6 @@ class LookupXBLService implements LookupContract
         } elseif ($this->id) {
             return "https://ident.tebex.io/usernameservices/3/username/{$this->id}";
         } else {
-            // do something?
             return '';
         }
     }
