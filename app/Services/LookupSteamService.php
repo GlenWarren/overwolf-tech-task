@@ -2,40 +2,18 @@
 
 namespace App\Services;
 
-use App\Contracts\LookupContract;
-use App\Traits\LookupTrait;
 use InvalidArgumentException;
+use App\Contracts\LookupContract;
+use App\Services\LookupService;
 
-class LookupSteamService implements LookupContract
+class LookupSteamService extends LookupService implements LookupContract
 {
-    use LookupTrait;
-
-    private $guzzle;
-    private $id;
-    private $username;
-
-    public function __construct($guzzle, ?string $id, ?string $username)
+    public function getUrl(?string $id, ?string $username): string
     {
-        $this->guzzle = $guzzle;
-        $this->id = $id;
-        $this->username = $username;
-    }
-
-    public function lookup()
-    {
-        $url = $this->getUrl();
-
-        $response = $this->getResponse($url);
-
-        return $this->extractUserDetails($response);
-    }
-
-    public function getUrl(): string
-    {
-        if ($this->username) {
+        if ($username) {
             throw new InvalidArgumentException('Steam only supports IDs');
-        } elseif ($this->id) {
-            return "https://ident.tebex.io/usernameservices/4/username/{$this->id}";
+        } elseif ($id) {
+            return "https://ident.tebex.io/usernameservices/4/username/{$id}";
         } else {
             return '';
         }
