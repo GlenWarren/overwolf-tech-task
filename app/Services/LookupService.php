@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Cache;
 
 class LookupService
 {
@@ -32,8 +33,16 @@ class LookupService
             throw new InvalidArgumentException('Invalid url. ID or Username missing.');
         }
 
+        if (Cache::has($url)) {
+            return Cache::get($url);
+        }
+
         $response = $this->guzzle->get($url);
-        return json_decode($response->getBody()->getContents());
+        $data = json_decode($response->getBody()->getContents());
+
+        Cache::put($url, $data, now()->addDays(10));
+
+        return $data;
     }
 
     public function extractUserDetails(mixed $response): array
