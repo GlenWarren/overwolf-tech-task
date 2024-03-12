@@ -15,23 +15,6 @@ use InvalidArgumentException;
  **/
 class LookupController extends Controller
 {
-    /**
-     * Composition
-     * Inheritance
-     * Contracts (Interfaces)
-     * Clean
-     * Maintainable
-     * PSR-12 standards
-     * SOLID principles
-     * OOP
-     * Dependency Injection (In Laravel this also includes use of the Service Container)
-     * 
-     * BONUS
-     * Due to rate limits enforced by the underlying services, consider how data can be cached or persisted so that we're not having to call the underlying service every time.
-     * Implement some 'defensive programming' (consider how and why the application might fail and implement appropriate precautions).
-     * Consider how error/fail states should be communicated back to the user.
-     **/
-
     public function lookup(Request $request)
     {
         $type = $request->get('type', null);

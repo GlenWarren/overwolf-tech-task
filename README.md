@@ -1,3 +1,10 @@
+## Notes
+
+### Redis
+
+- Make sure Redis is running locally: `brew services start redis`
+- `.env` should be configured with: `CACHE_DRIVER=redis` and `REDIS_CLIENT=predis`
+
 # Tebex Tech Test
 
 ## Submission
