@@ -49,7 +49,7 @@ class LookupController extends Controller
                 $service_name = 'LookupXBLService';
                 break;
             default:
-                throw new BadRequestHttpException("Type '{$type}' is not valid"); 
+                throw new BadRequestHttpException("Type '{$type}' is not valid");
         }
 
         if (is_null($id) && is_null($username)) {
